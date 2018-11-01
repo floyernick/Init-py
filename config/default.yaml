@@ -1,0 +1,6 @@
+db:
+  url: 'postgres://postgres:postgres@localhost:5432/Awesome'
+  min_conns: 10
+  max_conns: 50
+  conn_lifetime: 30
+  conn_timeout: 10

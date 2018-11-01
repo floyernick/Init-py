@@ -1,0 +1,6 @@
+aiohttp==3.4.4
+asyncpg==0.17.0
+Cerberus==1.2
+mypy==0.641
+yapf==0.24.0
+pyyaml==3.13
