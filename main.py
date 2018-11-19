@@ -1,5 +1,5 @@
 import config
-import database.postgres
+import storage
 import transfer.api
 import usecases
 
@@ -8,7 +8,7 @@ async def init() -> None:
 
     cfg = await config.load_config()
 
-    db = await database.postgres.init_db(cfg["db"])
+    db = await storage.init(cfg["db"])
 
     controller = await usecases.init_controller(db)
 

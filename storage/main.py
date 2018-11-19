@@ -2,11 +2,11 @@ from typing import Dict
 
 import asyncpg
 
-import database
+from . import interface
 from . import notes
 
 
-class Database(database.Database):
+class StorageImpl(interface.Storage):
     def __init__(self, pool: asyncpg.pool.Pool):
         self.pool = pool
 
@@ -16,7 +16,7 @@ class Database(database.Database):
     delete_note = notes.delete_note
 
 
-async def init_db(cfg: Dict) -> Database:
+async def init(cfg: Dict) -> StorageImpl:
 
     pool = await asyncpg.create_pool(
         dsn=cfg["url"],
@@ -25,6 +25,6 @@ async def init_db(cfg: Dict) -> Database:
         timeout=cfg["conn_timeout"],
         max_inactive_connection_lifetime=cfg["conn_lifetime"])
 
-    db = Database(pool)
+    db = StorageImpl(pool)
 
     return db

@@ -3,7 +3,7 @@ import abc
 import models
 
 
-class Database(abc.ABC):
+class Storage(abc.ABC):
     @abc.abstractmethod
     async def get_note(self, id: str) -> models.Note:
         pass

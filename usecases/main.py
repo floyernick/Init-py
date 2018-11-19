@@ -1,11 +1,11 @@
 from typing import Any
 
-import database
+import storage
 from . import notes
 
 
 class Controller:
-    def __init__(self, db: database.Database):
+    def __init__(self, db: storage.Storage):
         self.db = db
 
     notes_get = notes.notes_get
@@ -16,8 +16,8 @@ class Controller:
 
 async def init_controller(db: Any) -> Controller:
 
-    if not isinstance(db, database.Database):
-        raise Exception("invalid database instance")
+    if not isinstance(db, storage.Storage):
+        raise Exception("invalid storage instance")
 
     controller = Controller(db)
 
