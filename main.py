@@ -1,6 +1,6 @@
 import config
 import storage
-import transfer.api
+import presenter
 import usecases
 
 
@@ -12,6 +12,6 @@ async def init() -> None:
 
     controller = await usecases.init_controller(db)
 
-    api = await transfer.api.init_api(controller)
+    api = await presenter.init(controller)
 
     return api
