@@ -1,7 +1,7 @@
 import config
 import storage
 import presenter
-import usecases
+import controller
 
 
 async def init() -> None:
@@ -10,8 +10,8 @@ async def init() -> None:
 
     db = await storage.init(cfg["db"])
 
-    controller = await usecases.init_controller(db)
+    ctrl = await controller.init(db)
 
-    api = await presenter.init(controller)
+    api = await presenter.init(ctrl)
 
     return api

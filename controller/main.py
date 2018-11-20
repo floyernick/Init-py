@@ -14,7 +14,7 @@ class Controller:
     notes_delete = notes.notes_delete
 
 
-async def init_controller(db: Any) -> Controller:
+async def init(db: Any) -> Controller:
 
     if not isinstance(db, storage.Storage):
         raise Exception("invalid storage instance")

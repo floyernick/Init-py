@@ -1,12 +1,12 @@
 from aiohttp import web
 
-import usecases
+import controller
 from . import notes
 
 
 class API:
-    def __init__(self, controller: usecases.Controller):
-        self.controller = controller
+    def __init__(self, ctrl: controller.Controller):
+        self.controller = ctrl
 
     notes_get = notes.notes_get
     notes_create = notes.notes_create
@@ -14,9 +14,9 @@ class API:
     notes_delete = notes.notes_delete
 
 
-async def init(controller: usecases.Controller):
+async def init(ctrl: controller.Controller):
 
-    api = API(controller)
+    api = API(ctrl)
 
     app = web.Application()
 
