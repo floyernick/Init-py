@@ -1,12 +1,14 @@
+from dataclasses import dataclass
 from typing import Any
 
 import storage
 from . import notes
 
 
+@dataclass
 class Controller:
-    def __init__(self, db: storage.Storage):
-        self.db = db
+
+    storage: storage.Storage
 
     notes_get = notes.notes_get
     notes_create = notes.notes_create
@@ -14,11 +16,11 @@ class Controller:
     notes_delete = notes.notes_delete
 
 
-async def init(db: Any) -> Controller:
+async def init(storage_: Any) -> Controller:
 
-    if not isinstance(db, storage.Storage):
+    if not isinstance(storage_, storage.Storage):
         raise Exception("invalid storage instance")
 
-    controller = Controller(db)
+    controller = Controller(storage_)
 
     return controller

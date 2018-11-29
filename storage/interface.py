@@ -5,7 +5,7 @@ import models
 
 class Storage(abc.ABC):
     @abc.abstractmethod
-    async def get_note(self, id: str) -> models.Note:
+    async def get_note(self, id_: str) -> models.Note:
         pass
 
     @abc.abstractmethod
@@ -17,5 +17,5 @@ class Storage(abc.ABC):
         pass
 
     @abc.abstractmethod
-    async def delete_note(self, id: str) -> None:
+    async def delete_note(self, id_: str) -> None:
         pass

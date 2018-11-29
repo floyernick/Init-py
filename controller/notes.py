@@ -11,8 +11,8 @@ async def notes_get(self, req: Dict) -> Dict:
         raise Exception("invalid params")
 
     try:
-        note = await self.db.get_note(req["note_id"])
-    except Exception as _:
+        note = await self.storage.get_note(req["note_id"])
+    except Exception:
         raise Exception("internal error")
 
     if note.id == uuid.NIL_UUID:
@@ -33,11 +33,13 @@ async def notes_create(self, req: Dict) -> Dict:
         raise Exception("invalid params")
 
     note = models.Note(
-        id=uuid.generate(), title=req["note_title"], data=req["note_data"])
+        id=await uuid.generate(),
+        title=req["note_title"],
+        data=req["note_data"])
 
     try:
-        await self.db.store_note(note)
-    except Exception as _:
+        await self.storage.store_note(note)
+    except Exception:
         raise Exception("internal error")
 
     res = {"id": note.id}
@@ -51,16 +53,16 @@ async def notes_update(self, req: Dict) -> Dict:
         raise Exception("invalid params")
 
     try:
-        note = await self.db.get_note(req["note_id"])
-    except Exception as _:
+        note = await self.storage.get_note(req["note_id"])
+    except Exception:
         raise Exception("internal error")
 
     note.title = req["note_title"]
     note.data = req["note_data"]
 
     try:
-        await self.db.update_note(note)
-    except Exception as _:
+        await self.storage.update_note(note)
+    except Exception:
         raise Exception("internal error")
 
     res = {"id": note.id}
@@ -74,16 +76,16 @@ async def notes_delete(self, req: Dict) -> Dict:
         raise Exception("invalid params")
 
     try:
-        note = await self.db.get_note(req["note_id"])
-    except Exception as _:
+        note = await self.storage.get_note(req["note_id"])
+    except Exception:
         raise Exception("internal error")
 
     if note.id == uuid.NIL_UUID:
         raise Exception("invalid note id")
 
     try:
-        await self.db.delete_note(note.id)
-    except Exception as _:
+        await self.storage.delete_note(note.id)
+    except Exception:
         raise Exception("internal error")
 
     res = {}

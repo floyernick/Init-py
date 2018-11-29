@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Dict
 
 import asyncpg
@@ -6,9 +7,10 @@ from . import interface
 from . import notes
 
 
+@dataclass
 class StorageImpl(interface.Storage):
-    def __init__(self, pool: asyncpg.pool.Pool):
-        self.pool = pool
+
+    pool: asyncpg.pool.Pool
 
     get_note = notes.get_note
     store_note = notes.store_note

@@ -1,3 +1,6 @@
+import sys
+import logging
+
 import config
 import storage
 import presenter
@@ -6,12 +9,28 @@ import controller
 
 async def init() -> None:
 
-    cfg = await config.load_config()
+    try:
+        config_ = await config.load_config()
+    except Exception as e:
+        logging.error(e)
+        sys.exit(1)
 
-    db = await storage.init(cfg["db"])
+    try:
+        storage_ = await storage.init(config_["db"])
+    except Exception as e:
+        logging.error(e)
+        sys.exit(1)
 
-    ctrl = await controller.init(db)
+    try:
+        controller_ = await controller.init(storage_)
+    except Exception as e:
+        logging.error(e)
+        sys.exit(1)
 
-    api = await presenter.init(ctrl)
+    try:
+        presenter_ = await presenter.init(controller_)
+    except Exception as e:
+        logging.error(e)
+        sys.exit(1)
 
-    return api
+    return presenter_

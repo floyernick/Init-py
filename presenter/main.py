@@ -1,12 +1,15 @@
+from dataclasses import dataclass
+
 from aiohttp import web
 
 import controller
 from . import notes
 
 
+@dataclass
 class API:
-    def __init__(self, ctrl: controller.Controller):
-        self.controller = ctrl
+
+    controller: controller.Controller
 
     notes_get = notes.notes_get
     notes_create = notes.notes_create
@@ -14,9 +17,9 @@ class API:
     notes_delete = notes.notes_delete
 
 
-async def init(ctrl: controller.Controller):
+async def init(controller_: controller.Controller):
 
-    api = API(ctrl)
+    api = API(controller_)
 
     app = web.Application()
 
