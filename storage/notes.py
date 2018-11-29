@@ -1,5 +1,4 @@
-import logging
-
+import tools.logger as logger
 import models
 
 
@@ -12,7 +11,7 @@ async def get_note(self, id_: str) -> models.Note:
     try:
         result = await self.pool.fetchrow(query, id_)
     except Exception as e:
-        logging.error(e)
+        await logger.warning(str(e))
         raise
 
     if result is None:
@@ -32,7 +31,7 @@ async def store_note(self, note: models.Note) -> None:
     try:
         await self.pool.execute(query, note.id, note.title, note.data)
     except Exception as e:
-        logging.error(e)
+        await logger.warning(str(e))
         raise
 
 
@@ -43,7 +42,7 @@ async def update_note(self, note: models.Note) -> None:
     try:
         await self.pool.execute(query, note.id, note.title, note.data)
     except Exception as e:
-        logging.error(e)
+        await logger.warning(str(e))
         raise
 
 
@@ -54,5 +53,5 @@ async def delete_note(self, id_: str) -> None:
     try:
         await self.pool.execute(query, id_)
     except Exception as e:
-        logging.error(e)
+        await logger.warning(str(e))
         raise
