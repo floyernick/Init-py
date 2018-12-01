@@ -8,7 +8,7 @@ from . import notes
 
 
 @dataclass
-class StorageImpl(interface.Storage):
+class Storage(interface.Storage):
 
     pool: asyncpg.pool.Pool
 
@@ -18,7 +18,7 @@ class StorageImpl(interface.Storage):
     delete_note = notes.delete_note
 
 
-async def init(cfg: Dict) -> StorageImpl:
+async def init(cfg: Dict) -> Storage:
 
     pool = await asyncpg.create_pool(
         dsn=cfg["url"],
@@ -27,6 +27,6 @@ async def init(cfg: Dict) -> StorageImpl:
         timeout=cfg["conn_timeout"],
         max_inactive_connection_lifetime=cfg["conn_lifetime"])
 
-    db = StorageImpl(pool)
+    db = Storage(pool)
 
     return db
