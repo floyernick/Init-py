@@ -1,10 +1,11 @@
-from dataclasses import dataclass
-
 import tools.uuid as uuid
 
 
-@dataclass
 class Note:
-    id: str = uuid.NIL_UUID
-    title: str = ""
-    data: str = ""
+    def __init__(self,
+                 id_: str = uuid.NIL_UUID,
+                 title: str = "",
+                 data: str = ""):
+        self.id = id_
+        self.title = title
+        self.data = data

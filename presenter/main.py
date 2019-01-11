@@ -1,15 +1,12 @@
-from dataclasses import dataclass
-
 from aiohttp import web
 
 import controller
 from . import notes
 
 
-@dataclass
 class API:
-
-    controller: controller.Controller
+    def __init__(self, controller_: controller.Controller):
+        self.controller = controller_
 
     notes_get = notes.notes_get
     notes_create = notes.notes_create

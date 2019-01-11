@@ -1,14 +1,12 @@
-from dataclasses import dataclass
 from typing import Any
 
 import storage
 from . import notes
 
 
-@dataclass
 class Controller:
-
-    storage: storage.Storage
+    def __init__(self, storage_: storage.Storage):
+        self.storage = storage_
 
     notes_get = notes.notes_get
     notes_create = notes.notes_create

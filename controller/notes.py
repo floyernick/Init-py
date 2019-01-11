@@ -34,7 +34,7 @@ async def notes_create(self, req: Dict) -> Dict:
         raise app.DomainException("invalid params")
 
     note = models.Note(
-        id=await uuid.generate(),
+        id_=await uuid.generate(),
         title=req["note_title"],
         data=req["note_data"])
 
