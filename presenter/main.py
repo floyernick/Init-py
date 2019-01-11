@@ -1,10 +1,12 @@
+from typing import Dict
+
 from aiohttp import web
 
 import controller
 from . import notes
 
 
-class API:
+class Presenter:
     def __init__(self, controller_: controller.Controller):
         self.controller = controller_
 
@@ -14,17 +16,25 @@ class API:
     notes_delete = notes.notes_delete
 
 
-async def init(controller_: controller.Controller):
+async def init(config: Dict, controller_: controller.Controller):
 
-    api = API(controller_)
+    presenter = Presenter(controller_)
 
     app = web.Application()
 
     app.add_routes([
-        web.post("/notes.get", api.notes_get),
-        web.post("/notes.create", api.notes_create),
-        web.post("/notes.update", api.notes_update),
-        web.post("/notes.delete", api.notes_delete)
+        web.post("/notes.get", presenter.notes_get),
+        web.post("/notes.create", presenter.notes_create),
+        web.post("/notes.update", presenter.notes_update),
+        web.post("/notes.delete", presenter.notes_delete)
     ])
 
-    return app
+    runner = web.AppRunner(app, access_log=False)
+    await runner.setup()
+    site = web.TCPSite(
+        runner,
+        config["host"],
+        config["port"],
+        backlog=config["backlog"],
+        reuse_port=True)
+    await site.start()

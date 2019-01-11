@@ -1,10 +1,15 @@
 import sys
+import asyncio
+
+import uvloop
 
 import config
 import storage
 import presenter
 import controller
 import tools.logger as logger
+
+asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 
 async def init() -> None:
@@ -28,9 +33,12 @@ async def init() -> None:
         sys.exit(1)
 
     try:
-        presenter_ = await presenter.init(controller_)
+        await presenter.init(config_["server"], controller_)
     except Exception as e:
         await logger.error("failed to init presenter: {}".format(str(e)))
         sys.exit(1)
 
-    return presenter_
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(init())
+loop.run_forever()
