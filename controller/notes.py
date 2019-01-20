@@ -12,18 +12,14 @@ async def notes_get(self, req: Dict) -> Dict:
         raise app.DomainException("invalid params")
 
     try:
-        note = await self.storage.get_note(req["note_id"])
+        note = await self.storage.get_note(req["id"])
     except app.StorageException:
         raise app.DomainException("internal error")
 
     if note.id == uuid.NIL_UUID:
         raise app.DomainException("invalid note id")
 
-    res = {
-        "note_id": note.id,
-        "note_title": note.title,
-        "note_data": note.data
-    }
+    res = {"id": note.id, "title": note.title, "data": note.data}
 
     return res
 
@@ -34,9 +30,7 @@ async def notes_create(self, req: Dict) -> Dict:
         raise app.DomainException("invalid params")
 
     note = models.Note(
-        id_=await uuid.generate(),
-        title=req["note_title"],
-        data=req["note_data"])
+        id_=await uuid.generate(), title=req["title"], data=req["data"])
 
     try:
         await self.storage.store_note(note)
@@ -54,19 +48,22 @@ async def notes_update(self, req: Dict) -> Dict:
         raise app.DomainException("invalid params")
 
     try:
-        note = await self.storage.get_note(req["note_id"])
+        note = await self.storage.get_note(req["id"])
     except app.StorageException:
         raise app.DomainException("internal error")
 
-    note.title = req["note_title"]
-    note.data = req["note_data"]
+    if "title" in req:
+        note.title = req["title"]
+
+    if "data" in req:
+        note.data = req["data"]
 
     try:
         await self.storage.update_note(note)
     except app.StorageException:
         raise app.DomainException("internal error")
 
-    res = {"id": note.id}
+    res = {}
 
     return res
 
@@ -77,7 +74,7 @@ async def notes_delete(self, req: Dict) -> Dict:
         raise app.DomainException("invalid params")
 
     try:
-        note = await self.storage.get_note(req["note_id"])
+        note = await self.storage.get_note(req["id"])
     except app.StorageException:
         raise app.DomainException("internal error")
 

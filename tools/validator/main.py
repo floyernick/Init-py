@@ -4,7 +4,7 @@ import cerberus
 
 schemas = {
     "notes_get": {
-        "note_id": {
+        "id": {
             "required": True,
             "type": "string",
             "min": 36,
@@ -12,39 +12,39 @@ schemas = {
         }
     },
     "notes_create": {
-        "note_title": {
+        "title": {
             "required": True,
             "type": "string",
             "min": 1,
             "max": 50
         },
-        "note_data": {
+        "data": {
             "required": True,
             "type": "string",
             "min": 1
         }
     },
     "notes_update": {
-        "note_id": {
+        "id": {
             "required": True,
             "type": "string",
             "min": 36,
             "max": 36
         },
-        "note_title": {
-            "required": True,
+        "title": {
+            "required": False,
             "type": "string",
             "min": 1,
             "max": 50
         },
-        "note_data": {
-            "required": True,
+        "data": {
+            "required": False,
             "type": "string",
             "min": 1
         }
     },
     "notes_delete": {
-        "note_id": {
+        "id": {
             "required": True,
             "type": "string",
             "min": 36,
