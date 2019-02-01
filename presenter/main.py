@@ -1,9 +1,10 @@
-from typing import Dict
+from typing import Dict, Any
 
 from aiohttp import web
 
 import controller
 from . import notes
+from . import utils
 
 
 class Presenter:
@@ -16,11 +17,11 @@ class Presenter:
     notes_delete = notes.notes_delete
 
 
-async def init(config: Dict, controller_: controller.Controller):
+async def init(config: Dict[str, Any], controller_: controller.Controller):
 
     presenter = Presenter(controller_)
 
-    app = web.Application()
+    app = web.Application(middlewares=[utils.handle])
 
     app.add_routes([
         web.post("/notes.get", presenter.notes_get),

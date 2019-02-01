@@ -9,3 +9,6 @@ class Note:
         self.id = id_
         self.title = title
         self.data = data
+
+    def is_empty(self) -> bool:
+        return self.id == uuid.NIL_UUID

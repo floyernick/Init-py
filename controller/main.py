@@ -1,5 +1,3 @@
-from typing import Any
-
 import storage
 from . import notes
 
@@ -14,11 +12,6 @@ class Controller:
     notes_delete = notes.notes_delete
 
 
-async def init(storage_: Any) -> Controller:
-
-    if not isinstance(storage_, storage.Storage):
-        raise Exception("invalid storage instance")
-
+async def init(storage_: storage.Storage) -> Controller:
     controller = Controller(storage_)
-
     return controller

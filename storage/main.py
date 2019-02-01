@@ -1,34 +1,39 @@
-from typing import Dict, Union
+from __future__ import annotations
+from typing import Dict, Union, Any, Optional
 
 import asyncpg
 
-import app
+import app.errors as errors
 import tools.logger as logger
 from . import interface
 from . import notes
 
 
-async def transaction(self) -> 'Storage':
+async def transaction(self: Storage) -> Storage:
     try:
         conn = await self.pool.acquire()
         tx = conn.transaction()
         await tx.start()
     except Exception as e:
         await logger.warning(e)
-        raise app.StorageException
+        raise errors.StorageException
     return Storage(self.pool, conn, tx)
 
 
-async def commit(self) -> None:
+async def commit(self: Storage) -> None:
+    if self.tx is None:
+        return
     try:
         await self.tx.commit()
         await self.pool.release(self.conn)
     except Exception as e:
         await logger.warning(e)
-        raise app.StorageException
+        raise errors.StorageException
 
 
-async def rollback(self) -> None:
+async def rollback(self: Storage) -> None:
+    if self.tx is None:
+        return
     try:
         await self.tx.rollback()
         await self.pool.release(self.conn)
@@ -36,27 +41,25 @@ async def rollback(self) -> None:
         await logger.warning(e)
 
 
-def performer(self) -> Union[asyncpg.pool.Pool, asyncpg.connection.Connection]:
-    if self.tx is not None:
-        return self.conn
-    else:
-        return self.pool
-
-
 class Storage(interface.Storage):
     def __init__(self,
                  pool: asyncpg.pool.Pool,
-                 conn: asyncpg.connection.Connection = None,
-                 tx: asyncpg.transaction.Transaction = None):
+                 conn: Optional[asyncpg.connection.Connection] = None,
+                 tx: Optional[asyncpg.transaction.Transaction] = None):
         self.pool = pool
         self.conn = conn
         self.tx = tx
 
+    def performer(
+            self) -> Union[asyncpg.pool.Pool, asyncpg.connection.Connection]:
+        if self.tx is not None:
+            return self.conn
+        else:
+            return self.pool
+
     transaction = transaction
     commit = commit
     rollback = rollback
-
-    performer = performer
 
     get_note = notes.get_note
     store_note = notes.store_note
@@ -64,15 +67,15 @@ class Storage(interface.Storage):
     delete_note = notes.delete_note
 
 
-async def init(cfg: Dict) -> Storage:
+async def init(config: Dict[str, Any]) -> Storage:
 
     pool = await asyncpg.create_pool(
-        dsn=cfg["url"],
-        min_size=cfg["min_conns"],
-        max_size=cfg["max_conns"],
-        timeout=cfg["conn_timeout"],
-        max_inactive_connection_lifetime=cfg["conn_lifetime"])
+        dsn=config["url"],
+        min_size=config["min_conns"],
+        max_size=config["max_conns"],
+        timeout=config["conn_timeout"],
+        max_inactive_connection_lifetime=config["conn_lifetime"])
 
-    db = Storage(pool)
+    storage = Storage(pool)
 
-    return db
+    return storage

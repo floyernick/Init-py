@@ -1,6 +1,11 @@
-from typing import Dict
+from typing import Dict, Any
 
 import cerberus
+
+
+class ValidationError(Exception):
+    pass
+
 
 schemas = {
     "notes_get": {
@@ -54,6 +59,7 @@ schemas = {
 }
 
 
-async def validate(kind: str, document: Dict) -> bool:
+async def validate(kind: str, document: Dict[str, Any]) -> None:
     v = cerberus.Validator()
-    return v.validate(document, schemas[kind])
+    if not v.validate(document, schemas[kind]):
+        raise ValidationError

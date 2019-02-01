@@ -17,25 +17,25 @@ async def init() -> None:
     try:
         config_ = await config.load_config()
     except Exception as e:
-        await logger.error("failed to load config: {}".format(str(e)))
+        await logger.error(f"failed to load config: {e}")
         sys.exit(1)
 
     try:
         storage_ = await storage.init(config_["db"])
     except Exception as e:
-        await logger.error("failed to init storage: {}".format(str(e)))
+        await logger.error(f"failed to init storage: {e}")
         sys.exit(1)
 
     try:
         controller_ = await controller.init(storage_)
     except Exception as e:
-        await logger.error("failed to init controller: {}".format(str(e)))
+        await logger.error(f"failed to init controller: {e}")
         sys.exit(1)
 
     try:
         await presenter.init(config_["server"], controller_)
     except Exception as e:
-        await logger.error("failed to init presenter: {}".format(str(e)))
+        await logger.error(f"failed to init presenter: {e}")
         sys.exit(1)
 
 

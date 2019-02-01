@@ -1,65 +1,32 @@
-from typing import Any
-import json
+from __future__ import annotations
+from typing import Any, Dict
 
-import app
 from . import utils
 
-
-async def notes_get(self, r: Any):
-
-    try:
-        request_data = await r.json()
-    except json.decoder.JSONDecodeError:
-        return utils.error_response("invalid request data")
-
-    try:
-        response_data = await self.controller.notes_get(request_data)
-    except app.DomainException as e:
-        return utils.error_response(str(e))
-
-    return utils.success_response(response_data)
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .main import Presenter
 
 
-async def notes_create(self, r: Any):
-
-    try:
-        request_data = await r.json()
-    except json.decoder.JSONDecodeError:
-        return utils.error_response("invalid request data")
-
-    try:
-        response_data = await self.controller.notes_create(request_data)
-    except app.DomainException as e:
-        return utils.error_response(str(e))
-
-    return utils.success_response(response_data)
+async def notes_get(self: Presenter, request: Any) -> Dict[str, Any]:
+    request_body = await utils.parse_request_body(request)
+    result = await self.controller.notes_get(request_body)
+    return result
 
 
-async def notes_update(self, r: Any):
-
-    try:
-        request_data = await r.json()
-    except json.decoder.JSONDecodeError:
-        return utils.error_response("invalid request data")
-
-    try:
-        response_data = await self.controller.notes_update(request_data)
-    except app.DomainException as e:
-        return utils.error_response(str(e))
-
-    return utils.success_response(response_data)
+async def notes_create(self: Presenter, request: Any) -> Dict[str, Any]:
+    request_body = await utils.parse_request_body(request)
+    result = await self.controller.notes_create(request_body)
+    return result
 
 
-async def notes_delete(self, r: Any):
+async def notes_update(self: Presenter, request: Any) -> Dict[str, Any]:
+    request_body = await utils.parse_request_body(request)
+    result = await self.controller.notes_update(request_body)
+    return result
 
-    try:
-        request_data = await r.json()
-    except json.decoder.JSONDecodeError:
-        return utils.error_response("invalid request data")
 
-    try:
-        response_data = await self.controller.notes_delete(request_data)
-    except app.DomainException as e:
-        return utils.error_response(str(e))
-
-    return utils.success_response(response_data)
+async def notes_delete(self: Presenter, request: Any) -> Dict[str, Any]:
+    request_body = await utils.parse_request_body(request)
+    result = await self.controller.notes_delete(request_body)
+    return result

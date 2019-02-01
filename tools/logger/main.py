@@ -9,14 +9,10 @@ ERROR_LEVEL = 31
 
 
 async def log(level: int, message: Union[Exception, str]) -> None:
-
-    print("\033[{level}m●\033[0m {time} | {file}::{func} | {message}".format(
-        level=level,
-        time=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        file=inspect.stack()[2][1],
-        func=inspect.stack()[2][3],
-        message=str(message)
-    ))
+    time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    file = inspect.stack()[2][1]
+    function = inspect.stack()[2][3]
+    print(f"\033[{level}m●\033[0m {time} | {file}::{function} | {message}")
 
 
 async def debug(message: Union[Exception, str]) -> None:

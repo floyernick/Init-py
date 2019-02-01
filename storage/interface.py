@@ -1,3 +1,4 @@
+from __future__ import annotations
 import abc
 
 import models
@@ -5,15 +6,15 @@ import models
 
 class Storage(abc.ABC):
     @abc.abstractmethod
-    async def commit(self):
+    async def commit(self) -> None:
         pass
 
     @abc.abstractmethod
-    async def rollback(self):
+    async def rollback(self) -> None:
         pass
 
     @abc.abstractmethod
-    async def transaction(self):
+    async def transaction(self) -> Storage:
         pass
 
     @abc.abstractmethod

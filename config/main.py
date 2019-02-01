@@ -1,15 +1,15 @@
 import os
-from typing import Dict
+from typing import Dict, Any
 
 import yaml
 
-location = os.path.realpath(
+file_location = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
-name = "default"
+file_name = "default"
 
 
-async def load_config() -> Dict:
-    f = open(os.path.join(location, "{}.yaml".format(name)), "r")
-    d = yaml.load(f)
-    return d
+async def load_config() -> Dict[str, Any]:
+    file = open(os.path.join(file_location, "{}.yaml".format(file_name)), "r")
+    config = yaml.load(file)
+    return config

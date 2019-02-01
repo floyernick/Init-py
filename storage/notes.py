@@ -1,19 +1,25 @@
-import tools.logger as logger
-import app
+from __future__ import annotations
+
 import models
+import app.errors as errors
+import tools.logger as logger
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .main import Storage
 
 
-async def get_note(self, id_: str) -> models.Note:
+async def get_note(self: Storage, id_: str) -> models.Note:
 
     note = models.Note()
 
     query = "SELECT id, title, data FROM notes WHERE id = $1"
 
     try:
-        result = await self.pool.fetchrow(query, id_)
+        result = await self.performer().fetchrow(query, id_)
     except Exception as e:
         await logger.warning(e)
-        raise app.StorageException
+        raise errors.StorageException
 
     if result is None:
         return note
@@ -25,34 +31,34 @@ async def get_note(self, id_: str) -> models.Note:
     return note
 
 
-async def store_note(self, note: models.Note) -> None:
+async def store_note(self: Storage, note: models.Note) -> None:
 
     query = "INSERT INTO notes(id, title, data) VALUES ($1, $2, $3)"
 
     try:
-        await self.pool.execute(query, note.id, note.title, note.data)
+        await self.performer().execute(query, note.id, note.title, note.data)
     except Exception as e:
         await logger.warning(e)
-        raise app.StorageException
+        raise errors.StorageException
 
 
-async def update_note(self, note: models.Note) -> None:
+async def update_note(self: Storage, note: models.Note) -> None:
 
     query = "UPDATE notes SET title = $2, data = $3 WHERE id = $1"
 
     try:
-        await self.pool.execute(query, note.id, note.title, note.data)
+        await self.performer().execute(query, note.id, note.title, note.data)
     except Exception as e:
         await logger.warning(e)
-        raise app.StorageException
+        raise errors.StorageException
 
 
-async def delete_note(self, id_: str) -> None:
+async def delete_note(self: Storage, id_: str) -> None:
 
     query = "DELETE FROM notes WHERE id = $1"
 
     try:
-        await self.pool.execute(query, id_)
+        await self.performer().execute(query, id_)
     except Exception as e:
         await logger.warning(e)
-        raise app.StorageException
+        raise errors.StorageException
