@@ -23,15 +23,15 @@ async def parse_request_body(request: Any) -> Dict:
     return request_body
 
 
-async def respond_with_success(result: Dict[str, Any]):
-    response_body = {"status": True, "result": result}
-    return await respond(response_body)
+async def respond_with_success(result: Dict):
+    return await respond(200, result)
 
 
 async def respond_with_error(error: str):
-    response_body = {"status": False, "error": error}
-    return await respond(response_body)
+    result = {"error": error}
+    return await respond(400, result)
 
 
-async def respond(response_body: Dict[str, Any]):
-    return web.Response(text=json.dumps(response_body), content_type="application/json")
+async def respond(status: int, result: Dict[str, Any]):
+    response = web.Response(status=status, content_type="application/json", text=json.dumps(result))
+    return response
