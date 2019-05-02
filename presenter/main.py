@@ -32,10 +32,5 @@ async def init(config: Dict[str, Any], controller_: controller.Controller):
 
     runner = web.AppRunner(app, access_log=False)
     await runner.setup()
-    site = web.TCPSite(
-        runner,
-        config["host"],
-        config["port"],
-        backlog=config["backlog"],
-        reuse_port=True)
+    site = web.TCPSite(runner, config["host"], config["port"], backlog=config["backlog"], reuse_port=True)
     await site.start()

@@ -30,5 +30,5 @@ class Storage(abc.ABC):
         pass
 
     @abc.abstractmethod
-    async def delete_note(self, id_: str) -> None:
+    async def delete_note(self, note: models.Note) -> None:
         pass

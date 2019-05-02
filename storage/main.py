@@ -50,8 +50,7 @@ class Storage(interface.Storage):
         self.conn = conn
         self.tx = tx
 
-    def performer(
-            self) -> Union[asyncpg.pool.Pool, asyncpg.connection.Connection]:
+    def performer(self) -> Union[asyncpg.pool.Pool, asyncpg.connection.Connection]:
         if self.tx is not None:
             return self.conn
         else:

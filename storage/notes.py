@@ -24,9 +24,9 @@ async def get_note(self: Storage, id_: str) -> models.Note:
     if result is None:
         return note
 
-    note.id = str(result["id"])
-    note.title = result["title"]
-    note.data = result["data"]
+    note.set_id(str(result["id"]))
+    note.set_title(result["title"])
+    note.set_data(result["data"])
 
     return note
 
@@ -36,7 +36,7 @@ async def store_note(self: Storage, note: models.Note) -> None:
     query = "INSERT INTO notes(id, title, data) VALUES ($1, $2, $3)"
 
     try:
-        await self.performer().execute(query, note.id, note.title, note.data)
+        await self.performer().execute(query, note.get_id(), note.get_title(), note.get_data())
     except Exception as e:
         await logger.warning(e)
         raise errors.StorageException
@@ -47,18 +47,18 @@ async def update_note(self: Storage, note: models.Note) -> None:
     query = "UPDATE notes SET title = $2, data = $3 WHERE id = $1"
 
     try:
-        await self.performer().execute(query, note.id, note.title, note.data)
+        await self.performer().execute(query, note.get_id(), note.get_title(), note.get_data())
     except Exception as e:
         await logger.warning(e)
         raise errors.StorageException
 
 
-async def delete_note(self: Storage, id_: str) -> None:
+async def delete_note(self: Storage, note: models.Note) -> None:
 
     query = "DELETE FROM notes WHERE id = $1"
 
     try:
-        await self.performer().execute(query, id_)
+        await self.performer().execute(query, note.get_id())
     except Exception as e:
         await logger.warning(e)
         raise errors.StorageException

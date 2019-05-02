@@ -11,8 +11,7 @@ if TYPE_CHECKING:
     from .main import Controller
 
 
-async def notes_get(self: Controller,
-                    params: Dict[str, Any]) -> Dict[str, Any]:
+async def notes_get(self: Controller, params: Dict[str, Any]) -> Dict[str, Any]:
 
     try:
         await validator.validate("notes_get", params)
@@ -24,37 +23,34 @@ async def notes_get(self: Controller,
     except errors.StorageException:
         raise errors.InternalError
 
-    if note.is_empty():
+    if not note.exists():
         raise errors.NoteNotFound
 
-    result = {"id": note.id, "title": note.title, "data": note.data}
+    result = {"id": note.get_id(), "title": note.get_title(), "data": note.get_data()}
 
     return result
 
 
-async def notes_create(self: Controller,
-                       params: Dict[str, Any]) -> Dict[str, Any]:
+async def notes_create(self: Controller, params: Dict[str, Any]) -> Dict[str, Any]:
 
     try:
         await validator.validate("notes_create", params)
     except validator.ValidationError:
         raise errors.InvalidParams
 
-    note = models.Note(
-        id_=await uuid.generate(), title=params["title"], data=params["data"])
+    note = models.Note(id_=await uuid.generate(), title=params["title"], data=params["data"])
 
     try:
         await self.storage.store_note(note)
     except errors.StorageException:
         raise errors.InternalError
 
-    result = {"id": note.id}
+    result = {"id": note.get_id()}
 
     return result
 
 
-async def notes_update(self: Controller,
-                       params: Dict[str, Any]) -> Dict[str, Any]:
+async def notes_update(self: Controller, params: Dict[str, Any]) -> Dict[str, Any]:
 
     try:
         await validator.validate("notes_update", params)
@@ -66,14 +62,14 @@ async def notes_update(self: Controller,
     except errors.StorageException:
         raise errors.InternalError
 
-    if note.is_empty():
+    if not note.exists():
         raise errors.NoteNotFound
 
     if "title" in params:
-        note.title = params["title"]
+        note.set_title(params["title"])
 
     if "data" in params:
-        note.data = params["data"]
+        note.set_data(params["data"])
 
     try:
         await self.storage.update_note(note)
@@ -85,8 +81,7 @@ async def notes_update(self: Controller,
     return result
 
 
-async def notes_delete(self: Controller,
-                       params: Dict[str, Any]) -> Dict[str, Any]:
+async def notes_delete(self: Controller, params: Dict[str, Any]) -> Dict[str, Any]:
 
     try:
         await validator.validate("notes_delete", params)
@@ -98,11 +93,11 @@ async def notes_delete(self: Controller,
     except errors.StorageException:
         raise errors.InternalError
 
-    if note.is_empty():
+    if not note.exists():
         raise errors.NoteNotFound
 
     try:
-        await self.storage.delete_note(note.id)
+        await self.storage.delete_note(note)
     except errors.StorageException:
         raise errors.InternalError
 

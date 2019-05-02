@@ -34,5 +34,4 @@ async def respond_with_error(error: str):
 
 
 async def respond(response_body: Dict[str, Any]):
-    return web.Response(
-        text=json.dumps(response_body), content_type="application/json")
+    return web.Response(text=json.dumps(response_body), content_type="application/json")
