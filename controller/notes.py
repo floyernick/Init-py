@@ -26,7 +26,7 @@ async def notes_get(self: Controller, params: Dict[str, Any]) -> Dict[str, Any]:
     if not note.exists():
         raise errors.NoteNotFound
 
-    result = {"id": note.get_id(), "title": note.get_title(), "data": note.get_data()}
+    result = {"id": note.id, "title": note.title, "data": note.data}
 
     return result
 
@@ -45,7 +45,7 @@ async def notes_create(self: Controller, params: Dict[str, Any]) -> Dict[str, An
     except errors.StorageException:
         raise errors.InternalError
 
-    result = {"id": note.get_id()}
+    result = {"id": note.id}
 
     return result
 
@@ -66,10 +66,10 @@ async def notes_update(self: Controller, params: Dict[str, Any]) -> Dict[str, An
         raise errors.NoteNotFound
 
     if "title" in params:
-        note.set_title(params["title"])
+        note.title = params["title"]
 
     if "data" in params:
-        note.set_data(params["data"])
+        note.data = params["data"]
 
     try:
         await self.storage.update_note(note)
