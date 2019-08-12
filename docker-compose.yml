@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+  app:
+    build: .
+    env_file:
+      - default.env
+    ports:
+     - "8888:80"
+    restart: always
