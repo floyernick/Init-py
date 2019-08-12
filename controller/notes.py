@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 async def notes_get(self: Controller, params: Dict[str, Any]) -> Dict[str, Any]:
 
     try:
-        await validator.validate("notes_get", params)
+        validator.validate("notes_get", params)
     except validator.ValidationError:
         raise errors.InvalidParams
 
@@ -34,11 +34,11 @@ async def notes_get(self: Controller, params: Dict[str, Any]) -> Dict[str, Any]:
 async def notes_create(self: Controller, params: Dict[str, Any]) -> Dict[str, Any]:
 
     try:
-        await validator.validate("notes_create", params)
+        validator.validate("notes_create", params)
     except validator.ValidationError:
         raise errors.InvalidParams
 
-    note = models.Note(id_=await uuid.generate(), title=params["title"], data=params["data"])
+    note = models.Note(id_=uuid.generate(), title=params["title"], data=params["data"])
 
     try:
         await self.storage.store_note(note)
@@ -53,7 +53,7 @@ async def notes_create(self: Controller, params: Dict[str, Any]) -> Dict[str, An
 async def notes_update(self: Controller, params: Dict[str, Any]) -> Dict[str, Any]:
 
     try:
-        await validator.validate("notes_update", params)
+        validator.validate("notes_update", params)
     except validator.ValidationError:
         raise errors.InvalidParams
 
@@ -84,7 +84,7 @@ async def notes_update(self: Controller, params: Dict[str, Any]) -> Dict[str, An
 async def notes_delete(self: Controller, params: Dict[str, Any]) -> Dict[str, Any]:
 
     try:
-        await validator.validate("notes_delete", params)
+        validator.validate("notes_delete", params)
     except validator.ValidationError:
         raise errors.InvalidParams
 

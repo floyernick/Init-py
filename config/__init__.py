@@ -1,1 +1,1 @@
-from .main import load_config
+from .main import init

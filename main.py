@@ -15,7 +15,7 @@ asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 async def init() -> None:
 
     try:
-        config_ = await config.load_config()
+        config_ = await config.init()
     except Exception as e:
         await logger.error(f"failed to load config: {e}")
         sys.exit(1)

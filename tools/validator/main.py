@@ -59,7 +59,7 @@ schemas = {
 }
 
 
-async def validate(kind: str, document: Dict[str, Any]) -> None:
+def validate(kind: str, document: Dict[str, Any]) -> None:
     v = cerberus.Validator()
     if not v.validate(document, schemas[kind]):
         raise ValidationError
