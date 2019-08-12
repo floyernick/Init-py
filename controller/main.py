@@ -4,7 +4,7 @@ from . import notes
 
 class Controller:
     def __init__(self, storage_: storage.Storage):
-        self.storage = storage_
+        self.storage: storage.Storage = storage_
 
     notes_get = notes.notes_get
     notes_create = notes.notes_create

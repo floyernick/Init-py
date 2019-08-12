@@ -1,15 +1,22 @@
 import os
 from typing import Dict, Any
 
-import yaml
 
-file_location = os.path.realpath(
-    os.path.join(os.getcwd(), os.path.dirname(__file__)))
+async def init() -> Dict[str, Any]:
 
-file_name = "default"
+    config = {
+        "server": {
+            "host": os.environ["INIT_SERVER_HOST"],
+            "port": int(os.environ["INIT_SERVER_PORT"]),
+            "backlog": int(os.environ["INIT_SERVER_BACKLOG"])
+        },
+        "db": {
+            "url": os.environ["INIT_DB_URL"],
+            "min_conns": int(os.environ["INIT_DB_MIN_CONNS"]),
+            "max_conns": int(os.environ["INIT_DB_MAX_CONNS"]),
+            "conn_lifetime": int(os.environ["INIT_DB_CONN_LIFETIME"]),
+            "conn_timeout": int(os.environ["INIT_DB_CONN_TIMEOUT"])
+        }
+    }
 
-
-async def load_config() -> Dict[str, Any]:
-    file = open(os.path.join(file_location, "{}.yaml".format(file_name)), "r")
-    config = yaml.load(file)
     return config

@@ -9,7 +9,7 @@ from . import utils
 
 class Presenter:
     def __init__(self, controller_: controller.Controller):
-        self.controller = controller_
+        self.controller: controller.Controller = controller_
 
     notes_get = notes.notes_get
     notes_create = notes.notes_create

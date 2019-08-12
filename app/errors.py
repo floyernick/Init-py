@@ -1,5 +1,5 @@
 class PresenterException(Exception):
-    pass
+    description = ""
 
 
 class InvalidRequest(PresenterException):
@@ -7,7 +7,7 @@ class InvalidRequest(PresenterException):
 
 
 class DomainException(Exception):
-    pass
+    description = ""
 
 
 class InvalidParams(DomainException):
@@ -23,4 +23,4 @@ class NoteNotFound(DomainException):
 
 
 class StorageException(Exception):
-    pass
+    description = ""
