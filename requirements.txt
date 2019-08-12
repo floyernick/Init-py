@@ -3,5 +3,4 @@ asyncpg==0.18.2
 Cerberus==1.2
 mypy==0.641
 yapf==0.24.0
-pyyaml==3.13
 uvloop==0.11.3
