@@ -5,6 +5,7 @@ import app.errors as errors
 import tools.logger as logger
 
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from .main import Storage
 

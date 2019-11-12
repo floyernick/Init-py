@@ -7,6 +7,7 @@ import tools.uuid as uuid
 import tools.validator as validator
 
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from .main import Controller
 

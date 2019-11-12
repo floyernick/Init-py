@@ -4,6 +4,7 @@ from typing import Any, Dict
 from . import utils
 
 from typing import TYPE_CHECKING
+
 if TYPE_CHECKING:
     from .main import Presenter
 

@@ -23,12 +23,14 @@ async def init(config: Dict[str, Any], controller_: controller.Controller):
 
     app = web.Application(middlewares=[utils.handle])
 
-    app.add_routes([
-        web.post("/notes.get", presenter.notes_get),
-        web.post("/notes.create", presenter.notes_create),
-        web.post("/notes.update", presenter.notes_update),
-        web.post("/notes.delete", presenter.notes_delete)
-    ])
+    app.add_routes(
+        [
+            web.post("/notes.get", presenter.notes_get),
+            web.post("/notes.create", presenter.notes_create),
+            web.post("/notes.update", presenter.notes_update),
+            web.post("/notes.delete", presenter.notes_delete),
+        ]
+    )
 
     runner = web.AppRunner(app, access_log=False)
     await runner.setup()

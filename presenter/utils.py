@@ -41,8 +41,9 @@ async def respond(status: int, result: Optional[Dict[str, Any]] = None):
         headers={
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "POST, OPTIONS",
-            "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Authorization"
-        })
+            "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Authorization",
+        },
+    )
     if result is not None:
         response.text = json.dumps(result)
     return response

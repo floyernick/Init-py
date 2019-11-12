@@ -42,10 +42,12 @@ async def rollback(self: Storage) -> None:
 
 
 class Storage(interface.Storage):
-    def __init__(self,
-                 pool: asyncpg.pool.Pool,
-                 conn: Optional[asyncpg.connection.Connection] = None,
-                 tx: Optional[asyncpg.transaction.Transaction] = None):
+    def __init__(
+        self,
+        pool: asyncpg.pool.Pool,
+        conn: Optional[asyncpg.connection.Connection] = None,
+        tx: Optional[asyncpg.transaction.Transaction] = None,
+    ):
         self.pool = pool
         self.conn = conn
         self.tx = tx
@@ -73,7 +75,8 @@ async def init(config: Dict[str, Any]) -> Storage:
         min_size=config["min_conns"],
         max_size=config["max_conns"],
         timeout=config["conn_timeout"],
-        max_inactive_connection_lifetime=config["conn_lifetime"])
+        max_inactive_connection_lifetime=config["conn_lifetime"],
+    )
 
     storage = Storage(pool)
 
