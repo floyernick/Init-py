@@ -7,6 +7,7 @@ class Controller:
         self.storage: storage.Storage = storage_
 
     notes_get = notes.notes_get
+    notes_list = notes.notes_list
     notes_create = notes.notes_create
     notes_update = notes.notes_update
     notes_delete = notes.notes_delete

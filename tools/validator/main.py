@@ -9,6 +9,10 @@ class ValidationError(Exception):
 
 schemas = {
     "notes_get": {"id": {"required": True, "type": "string", "min": 36, "max": 36}},
+    "notes_list": {
+        "offset": {"required": True, "type": "integer", "min": 0},
+        "limit": {"required": True, "type": "integer", "min": 1, "max": 100},
+    },
     "notes_create": {
         "title": {"required": True, "type": "string", "min": 1, "max": 50},
         "data": {"required": True, "type": "string", "min": 1},

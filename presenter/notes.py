@@ -15,6 +15,12 @@ async def notes_get(self: Presenter, request: Any) -> Dict[str, Any]:
     return result
 
 
+async def notes_list(self: Presenter, request: Any) -> Dict[str, Any]:
+    request_body = await utils.parse_request_body(request)
+    result = await self.controller.notes_list(request_body)
+    return result
+
+
 async def notes_create(self: Presenter, request: Any) -> Dict[str, Any]:
     request_body = await utils.parse_request_body(request)
     result = await self.controller.notes_create(request_body)

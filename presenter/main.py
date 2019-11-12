@@ -12,6 +12,7 @@ class Presenter:
         self.controller: controller.Controller = controller_
 
     notes_get = notes.notes_get
+    notes_list = notes.notes_list
     notes_create = notes.notes_create
     notes_update = notes.notes_update
     notes_delete = notes.notes_delete
@@ -26,6 +27,7 @@ async def init(config: Dict[str, Any], controller_: controller.Controller):
     app.add_routes(
         [
             web.post("/notes.get", presenter.notes_get),
+            web.post("/notes.list", presenter.notes_list),
             web.post("/notes.create", presenter.notes_create),
             web.post("/notes.update", presenter.notes_update),
             web.post("/notes.delete", presenter.notes_delete),

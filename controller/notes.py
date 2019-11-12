@@ -35,6 +35,30 @@ async def notes_get(self: Controller, params: Dict[str, Any]) -> Dict[str, Any]:
     return result
 
 
+async def notes_list(self: Controller, params: Dict[str, Any]) -> Dict[str, Any]:
+
+    try:
+        validator.validate("notes_list", params)
+    except validator.ValidationError:
+        raise errors.InvalidParams
+
+    notes_query = await self.storage.get_notes()
+    notes_query.paginate(params["offset"], params["limit"])
+
+    try:
+        notes = await notes_query.fetch()
+    except errors.StorageException:
+        raise errors.InternalError
+
+    result = {"notes": []}
+
+    for note in notes:
+        result_note = {"id": note.id, "title": note.title, "data": note.data}
+        result["notes"].append(result_note)
+
+    return result
+
+
 async def notes_create(self: Controller, params: Dict[str, Any]) -> Dict[str, Any]:
 
     try:
