@@ -1,8 +1,11 @@
 from __future__ import annotations
+from typing import List
 
 import models
 import app.errors as errors
 import tools.logger as logger
+
+from . import interface, query_builder
 
 from typing import TYPE_CHECKING
 
@@ -10,26 +13,80 @@ if TYPE_CHECKING:
     from .main import Storage
 
 
-async def get_note(self: Storage, id_: str) -> models.Note:
+class NoteQuery(interface.NoteQuery, query_builder.QueryBuilder):
+    async def count(self) -> int:
 
-    note = models.Note()
+        query = "SELECT COUNT(id) FROM notes"
 
-    query = "SELECT id, title, data FROM notes WHERE id = $1"
+        query = self._format_query(query, True)
 
-    try:
-        result = await self.performer().fetchrow(query, id_)
-    except Exception as e:
-        await logger.warning(e)
-        raise errors.StorageException
+        number = 0
 
-    if result is None:
+        try:
+            result = await self.storage.performer().fetchrow(query, *self.params)
+        except Exception as e:
+            await logger.warning(e)
+            raise errors.StorageException
+
+        if result is None:
+            return number
+
+        number = result["count"]
+
+        return number
+
+    async def fetch(self) -> List[models.Note]:
+
+        notes = []
+
+        query = "SELECT id, title, data FROM notes"
+
+        query = self._format_query(query)
+
+        try:
+            results = await self.storage.performer().fetch(query, *self.params)
+        except Exception as e:
+            await logger.warning(e)
+            raise errors.StorageException
+
+        if results is None:
+            return notes
+
+        for result in results:
+            note = models.Note()
+            note.id = str(result["id"])
+            note.title = result["title"]
+            note.data = result["data"]
+            notes.append(note)
+
+        return notes
+
+    async def fetch_one(self) -> models.Note:
+
+        note = models.Note()
+
+        query = "SELECT id, title, data FROM notes"
+
+        query = self._format_query(query)
+
+        try:
+            result = await self.storage.performer().fetchrow(query, *self.params)
+        except Exception as e:
+            await logger.warning(e)
+            raise errors.StorageException
+
+        if result is None:
+            return note
+
+        note.id = str(result["id"])
+        note.title = result["title"]
+        note.data = result["data"]
+
         return note
 
-    note.id = str(result["id"])
-    note.title = result["title"]
-    note.data = result["data"]
 
-    return note
+async def get_notes(self: Storage) -> NoteQuery:
+    return NoteQuery(self)
 
 
 async def store_note(self: Storage, note: models.Note) -> None:

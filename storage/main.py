@@ -62,7 +62,7 @@ class Storage(interface.Storage):
     commit = commit
     rollback = rollback
 
-    get_note = notes.get_note
+    get_notes = notes.get_notes
     store_note = notes.store_note
     update_note = notes.update_note
     delete_note = notes.delete_note

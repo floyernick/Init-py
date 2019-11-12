@@ -19,8 +19,11 @@ async def notes_get(self: Controller, params: Dict[str, Any]) -> Dict[str, Any]:
     except validator.ValidationError:
         raise errors.InvalidParams
 
+    note_query = await self.storage.get_notes()
+    note_query.add(note_query.equals("id", params["id"]))
+
     try:
-        note = await self.storage.get_note(params["id"])
+        note = await note_query.fetch_one()
     except errors.StorageException:
         raise errors.InternalError
 
@@ -58,8 +61,11 @@ async def notes_update(self: Controller, params: Dict[str, Any]) -> Dict[str, An
     except validator.ValidationError:
         raise errors.InvalidParams
 
+    note_query = await self.storage.get_notes()
+    note_query.add(note_query.equals("id", params["id"]))
+
     try:
-        note = await self.storage.get_note(params["id"])
+        note = await note_query.fetch_one()
     except errors.StorageException:
         raise errors.InternalError
 
@@ -89,8 +95,11 @@ async def notes_delete(self: Controller, params: Dict[str, Any]) -> Dict[str, An
     except validator.ValidationError:
         raise errors.InvalidParams
 
+    note_query = await self.storage.get_notes()
+    note_query.add(note_query.equals("id", params["id"]))
+
     try:
-        note = await self.storage.get_note(params["id"])
+        note = await note_query.fetch_one()
     except errors.StorageException:
         raise errors.InternalError
 
